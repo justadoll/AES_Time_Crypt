@@ -2,8 +2,8 @@
 Python scripts which encrypt and decrypt files.
 Could be used for NNN(*No Nut November*), some coders on freelanse (*not be tricked by customer*) and etc.
 
-##Example
-###Creating key
+##Example\n
+###Creating key\n
 `python3 encrypt.py text.txt`
 **Did you have a key-file? (y/n):** `n`
 **Making a new file named key.key**
