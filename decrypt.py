@@ -1,5 +1,6 @@
 import time
 import sys
+import random
 from os.path import isfile
 from cryptography.fernet import Fernet
 
@@ -20,7 +21,6 @@ def decrypt(key):
 def timeChecker():
     loc = time.localtime()
     obj = time.strptime("1 12 2020", "%d %m %Y") #Set your date here
-    nd = (obj.tm_mday, obj.tm_mon, obj.tm_year)
     now = (loc.tm_mday, loc.tm_mon, loc.tm_year)
     lst = list(zip(now, nd))
     tmp = 0
