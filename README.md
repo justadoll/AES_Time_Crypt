@@ -1,7 +1,7 @@
 # AES_Time_Crypt
 
 >Python scripts which encrypt and decrypt files.
-Could be used for NNN(*No Nut November*), some coders on freelanse (*not be tricked by customer*) and etc.
+Could be used for NNN(*No Nut November*), some coders on freelance (*not be tricked by customer*) and etc.
 
 Requirements
 
