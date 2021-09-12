@@ -6,7 +6,7 @@ Could be used for NNN(*No Nut November*), some coders on freelanse (*not be tric
 Requirements
 
 ```bash
-pip install cryptography
+pip install cryptography loguru
 ```
 
 ***
@@ -17,8 +17,11 @@ pip install cryptography
 
 ```bash
 $ python3 encrypt.py text.txt
-Did you have a key-file? (y/n): n
-Making a new file named key.key
+It seems what you didn't have a 'key' file
+Lets generate it!
+Give a name for key: key
+key.key was created successfully!
+File creds.txt was encrypted!
 ```
 
 ***
@@ -26,28 +29,33 @@ Making a new file named key.key
 ### Encrypting with generated key
 
 ```bash
-$ python3 encrypt.py text.txt key.key
-Did you have a key-file? (y/n): y
-```
+$ python3 encrypt.py another_creds.txt key.key
 
-(file was encrypted)
+key.key using as a key!
+File creds.txt was encrypted!
+```
 
 ### Decrypting file with key
 
 ```bash
-$ python3 decrypt.py text.txt key.key
+$ python3 decrypt.py creds.txt key.key
 ```
 
-(file was decrypted)
+If date is correct in ```decrypt.py``` file will be decrypted
+Check next module to get more information
 
 ***
 
 ### Time-Check function
 
 ```bash
-$ python3 decrypt.py text.txt key.key
+$ python3 decrypt.py creds.txt key.key
+2021-09-12 13:37:00.41 | ERROR    | __main__:timeChecker:39 - Invalid date!
 Wrong date kiddy...
 ```
+Because date, when I was tried to decrypt files was 12.09.2021, but in timeChecker on 24 line setted date was 13.09.2021
 
-You could change date in **decrypt.py** *timeChecker()* function ;)
-In future commits it`ll be normally obfusc
+You could change date in **decrypt.py** *timeChecker()* function
+Format is {day 1-31} {month 1-12} {year 202*}
+
+In future commits it will normally obfuscated to compile

@@ -7,15 +7,15 @@ from os.path import isfile
 try:
     filename = sys.argv[1]
     if not isfile(filename):
-        print("It`s not a file babe")
+        print("It`s not a file!")
         exit()
 except IndexError as IE:
-    print("Give a name of file pls\nPrint usage ...")
+    print("Give me file as next argument!")
 
 
-def write_key():
+def write_key(keyfilename:str):
     key = Fernet.generate_key()
-    with open("key.key", 'wb') as key_file:
+    with open(f"{keyfilename}.key", 'wb') as key_file:
         key_file.write(key)
 
 def load_key(keyfile):
@@ -42,14 +42,25 @@ def encrypt(key):
 
 
 #print("BE CAREFUL WITH 'key.key'! THIS FILE IS KEY FROM YOUR FILES\nSAVE IT IF YOU DIDN`T WANT TO LOSE YOUR FILES")
-answr = input("Did you have a key-file? (y/n): ")
-if answr == 'n' or answr == 'N':
-    print('Making a new file named key.key')
-    write_key()
-elif answr == 'y' or 'Y':
-    try:
+def main():
+    if len(sys.argv) == 1:
+        print("Check a README.MD before usage...")
+        return
+    elif len(sys.argv) < 3:
+        print("It seems what you didn't have a 'key' file\nLets generate it!")
+        key_file_name = input("Give a name for key: ")
+        write_key(key_file_name)
+        keyfile = key_file_name+'.key'
+        print("\n"+keyfile+' was created successfully!')
+    elif len(sys.argv) == 3:
         keyfile = sys.argv[2]
+        print(keyfile+" using as a key!")
+    try:
         key = load_key(keyfile)
         encrypt(key)
     except IndexError as IE:
         print("Where is a key-file? A?M?")
+    finally:
+        print(f"File {sys.argv[1]} was encrypted!")
+
+main()

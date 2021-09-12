@@ -3,6 +3,7 @@ import sys
 import random
 from os.path import isfile
 from cryptography.fernet import Fernet
+from loguru import logger
 
 def load_key(keyfile):
     return open(f'{keyfile}', 'rb').read()
@@ -20,19 +21,23 @@ def decrypt(key):
 ### CHECKER FUNC ###
 def timeChecker():
     loc = time.localtime()
-    obj = time.strptime("1 12 2020", "%d %m %Y") #Set your date here
+    obj = time.strptime("13 9 2021", "%d %m %Y") #Set your date here
+    nd = (obj.tm_mday, obj.tm_mon, obj.tm_year)
     now = (loc.tm_mday, loc.tm_mon, loc.tm_year)
     lst = list(zip(now, nd))
-    tmp = 0
-    for i in lst:
-        if(i[0] >= i[1]):
-            tmp += 1
-        else:
-            pass
-    if tmp == 3:
-        return True
+    if lst[2][0]>lst[2][1]:
+       logger.debug("YEAR is valid, decrypting!")
+       return True
     else:
-        return False
+        if lst[1][0]>lst[1][1]:
+            logger.debug("MOUNTH is valid, decrypting!")
+            return True
+        elif lst[1][0] == lst[1][1] and lst[0][0]>=lst[0][1]:
+            logger.debug("Mounth of day is valid, decrypting!")
+            return True
+        else:
+            logger.error("Invalid date!")
+            return False
 
 #FILE 
 try:
@@ -48,10 +53,9 @@ try:
     keyfile = sys.argv[2]
     if not isfile(keyfile):
         print("It`s not a key babe")
-        exit()
+
 except IndexError as IE:
     print("Give me a key-file!")
-    exit()
 
 if timeChecker() == True:
     key = load_key(keyfile)
