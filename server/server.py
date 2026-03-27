@@ -23,18 +23,21 @@ import sqlite3
 import time
 from datetime import datetime, timezone
 from pathlib import Path
+from dotenv import load_dotenv
 
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from fastapi import FastAPI, Header, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
 
 # ── Config ────────────────────────────────────────────────────────────────────
+load_dotenv()
 
 DB_PATH      = os.environ.get("DB_PATH",   "vault.db")
 MAX_BYTES    = int(os.environ.get("MAX_MB", "100")) * 1024 * 1024
 SECRET       = os.environ.get("SERVER_SECRET", secrets.token_hex(32))
-STATIC_DIR   = Path(os.environ.get("STATIC_DIR", "/var/www"))
+STATIC_DIR   = Path(os.environ.get("STATIC_DIR", "./web"))
 DEFAULT_DUR  = "1month"
 
 DURATIONS: dict[str, int] = {
@@ -89,13 +92,6 @@ def sign(payload: dict) -> str:
     msg = f"{payload['id']}:{payload['unlock_at']}".encode()
     return hashlib.sha256(SECRET.encode() + msg).hexdigest()[:32]
 
-def static(filename: str) -> HTMLResponse:
-    """Serve a static HTML file, with inline fallback if dir not mounted."""
-    p = STATIC_DIR / filename
-    if p.exists():
-        return HTMLResponse(p.read_text())
-    return HTMLResponse(f"<h1>{filename} not found</h1>", status_code=404)
-
 def resolve_enc_path(raw_path: str, header_filename: str) -> tuple[str, str]:
     """
     Parse the URL path suffix and return (duration, filename).
@@ -146,8 +142,16 @@ def favicon():
 
 
 @app.get("/", include_in_schema=False)
-def index():
-    return static("index.html")
+def index(request: Request):
+    templates = Jinja2Templates(directory="web")
+
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={
+            "domain": os.getenv("DOMAIN", "example.com")
+        },
+    )
 
 # ── /en  ──────────────────────────────────────────────────────────────────────
 
@@ -274,5 +278,4 @@ async def _decrypt(request: Request) -> Response:
 
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.environ.get("PORT", 8000))
-    uvicorn.run("server:app", host="0.0.0.0", port=port, reload=False)
+    uvicorn.run("server:app", host="0.0.0.0", port=8000, reload=False)

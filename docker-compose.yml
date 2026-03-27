@@ -1,0 +1,34 @@
+services:
+
+  aes_tc_app:
+    build: ./server
+    image: aes_tc_app:latest
+    container_name: aes_app
+    restart: unless-stopped
+    volumes:
+      - vault_data:/data
+    expose:
+      - "8000"
+    networks:
+      - proxy
+
+  aes_tc_nginx:
+    build: ./nginx
+    image: aes_tc_nginx:latest
+    container_name: aes_nginx
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      - aes_tc_app
+    ports:
+      - "8065:80"
+    networks:
+      - proxy
+
+volumes:
+  vault_data:
+
+networks:
+  proxy:
+    external: true

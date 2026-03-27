@@ -571,7 +571,7 @@
   <div class="h-icon">⏳</div>
   <div class="h-text">
     <div class="h-title">TimeLock Vault</div>
-    <div class="h-sub">t.yourdomain.com — AES-256-GCM time-lock encryption</div>
+    <div class="h-sub">{{ domain }} — AES-256-GCM time-lock encryption</div>
   </div>
   <div class="h-right">
     <a class="repo-btn" href="https://github.com/justadoll/AES_Time_Crypt" target="_blank" rel="noopener">
@@ -684,7 +684,7 @@
     <div class="card-bd">
       <div class="code code-enc" id="c1">
         <button class="copy-btn" onclick="cp('c1')">copy</button>
-        <span class="cp">$ </span>curl -T <span class="ca">file.txt</span> <span class="ca">t.yourdomain.com/en</span> -o <span class="ca">file.txt.tlp</span>
+        <span class="cp">$ </span>curl -T <span class="ca">file.txt</span> <span class="ca">{{ domain }}/en</span> -o <span class="ca">file.txt.tlp</span>
       </div>
     </div>
   </div>
@@ -694,7 +694,7 @@
     <div class="card-bd">
       <div class="code code-enc" id="c2">
         <button class="copy-btn" onclick="cp('c2')">copy</button>
-        <span class="cp">$ </span>curl -T <span class="ca">secrets.pdf</span> <span class="ca">t.yourdomain.com/en/<span class="hl">1year</span></span> -o <span class="ca">secrets.pdf.tlp</span>
+        <span class="cp">$ </span>curl -T <span class="ca">secrets.pdf</span> <span class="ca">{{ domain }}/en/<span class="hl">1year</span></span> -o <span class="ca">secrets.pdf.tlp</span>
       </div>
     </div>
   </div>
@@ -730,7 +730,7 @@
         <span class="cm"># python enc.py &lt;file&gt; [duration] [--server URL]</span><br><br>
         <span class="cp">$ </span>python enc.py <span class="ca">file.txt</span> <span class="cm">                         # 1month</span><br>
         <span class="cp">$ </span>python enc.py <span class="ca">file.txt</span> <span class="cf">1year</span><br>
-        <span class="cp">$ </span>python enc.py <span class="ca">file.txt</span> <span class="cf">2weeks</span> --server <span class="ca">https://t.yourdomain.com</span>
+        <span class="cp">$ </span>python enc.py <span class="ca">file.txt</span> <span class="cf">2weeks</span> --server <span class="ca">https://{{ domain }}</span>
       </div>
     </div>
   </div>
@@ -870,7 +870,7 @@
     <div class="card-bd">
       <div class="code code-dec" id="d1">
         <button class="copy-btn" onclick="cp('d1')">copy</button>
-        <span class="cp">$ </span>curl -T <span class="ca">file.txt.tlp</span> <span class="ca">t.yourdomain.com/de</span> -o <span class="ca">file.txt</span>
+        <span class="cp">$ </span>curl -T <span class="ca">file.txt.tlp</span> <span class="ca">{{ domain }}/de</span> -o <span class="ca">file.txt</span>
       </div>
     </div>
   </div>
@@ -880,7 +880,7 @@
     <div class="card-bd">
       <div class="code code-dec" id="d2">
         <button class="copy-btn" onclick="cp('d2')">copy</button>
-        <span class="cp">$ </span>curl -T <span class="ca">file.txt.tlp</span> <span class="ca">t.yourdomain.com/de</span> -o <span class="ca">file.txt</span> -w <span class="cf">"\nHTTP %{http_code}\n"</span>
+        <span class="cp">$ </span>curl -T <span class="ca">file.txt.tlp</span> <span class="ca">{{ domain }}/de</span> -o <span class="ca">file.txt</span> -w <span class="cf">"\nHTTP %{http_code}\n"</span>
       </div>
     </div>
   </div>
@@ -928,7 +928,7 @@
         <span class="cm"># python dec.py &lt;file.tlp&gt; [--output PATH] [--server URL]</span><br><br>
         <span class="cp">$ </span>python dec.py <span class="ca">file.txt.tlp</span> <span class="cm">                       # saves as file.txt</span><br>
         <span class="cp">$ </span>python dec.py <span class="ca">file.txt.tlp</span> --output <span class="ca">/tmp/result.txt</span><br>
-        <span class="cp">$ </span>python dec.py <span class="ca">file.txt.tlp</span> --server <span class="ca">https://t.yourdomain.com</span>
+        <span class="cp">$ </span>python dec.py <span class="ca">file.txt.tlp</span> --server <span class="ca">https://{{ domain }}</span>
       </div>
     </div>
   </div>
@@ -982,7 +982,7 @@
 
 <!-- FOOTER -->
 <footer>
-  <span>TimeLock Vault — t.yourdomain.com</span>
+  <span>TimeLock Vault — {{ domain }}</span>
   <span><a href="https://github.com/justadoll/AES_Time_Crypt" target="_blank" rel="noopener">github.com/justadoll/AES_Time_Crypt</a></span>
 </footer>
 

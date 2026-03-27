@@ -37,6 +37,8 @@ python dec.py file.txt.tlp --server https://domain.com
 
 ## Available Durations
 
+★ Default when no duration specified
+
 | Token     | Duration    |
 |-----------|-------------|
 | `1h`      | 1 hour      |
@@ -52,63 +54,6 @@ python dec.py file.txt.tlp --server https://domain.com
 | `6months` | 180 days    |
 | `1year`   | 365 days    |
 
-★ Default when no duration specified
-
----
-
-## Deploy
-
-### 1. Clone & configure
-
-```bash
-cp .env.example .env
-# edit .env — set a long random SERVER_SECRET
-```
-
-### 2. Point your DNS
-
-```
-t.yourdomain.com  →  your server IP
-```
-
-### 3. Configure your domain
-
-Edit `nginx/nginx.conf` — replace `t.yourdomain.com` with your FQDN:
-
-```nginx
-server_name t.yourdomain.com;
-```
-
-Edit `web/index.html` — Ctrl+F `t.yourdomain.com` and replace with your FQDN.
-
-### 4. Run
-
-```bash
-docker compose up -d
-```
-
-Routes:
-
-```
-GET  t.yourdomain.com/en            →  instruction page (encrypt tab)
-PUT  t.yourdomain.com/en            →  encrypt, default 1month
-PUT  t.yourdomain.com/en/1year      →  encrypt with duration
-PUT  t.yourdomain.com/en/1year/f    →  encrypt (curl -T appends filename)
-
-GET  t.yourdomain.com/de            →  instruction page (decrypt tab)
-PUT  t.yourdomain.com/de            →  decrypt
-PUT  t.yourdomain.com/de/f.tlp      →  decrypt (curl -T appends filename)
-```
-
-### 5. HTTPS (Let's Encrypt)
-
-Uncomment the `certbot` block in `docker-compose.yml`, fill in your email, then:
-
-```bash
-docker compose run --rm certbot
-docker compose restart nginx
-```
-
 ---
 
 ## API Reference
@@ -119,7 +64,7 @@ Encrypt a file and store its key in the vault.
 
 **Request:**
 - Body: raw file bytes
-- Header `X-Filename`: original filename (optional, default: inferred from URL or `"file"`)
+- Header `X-Filename`: original filename (optional)
 
 **Response:** `.tlp` file (JSON blob)
 
@@ -159,6 +104,16 @@ Attempt to decrypt a `.tlp` file.
 }
 ```
 
+### `GET /health`
+
+**Responses:**
+```json
+{
+  "ok": true,
+  "ts": 1710000000
+}
+```
+
 ---
 
 ## .tlp File Format
@@ -178,6 +133,45 @@ Attempt to decrypt a `.tlp` file.
 
 The `.tlp` file contains **only the ciphertext** and a key reference ID.
 The actual AES-256 key lives only on the server.
+
+---
+
+
+## Deploy
+
+### 1. Clone & configure
+
+```bash
+cp .env.example .env
+# edit .env — set DOMAIN
+```
+
+### 2. Point your DNS
+
+```
+example.com  →  your server IP
+```
+
+### 3. Run
+
+```bash
+docker compose up -d
+```
+
+Routes:
+
+```
+GET  /              → main UI (Jinja template)
+GET  /health        → {"ok": true, "ts": ...}
+
+PUT  /en            → encrypt (default: 1month)
+PUT  /en/1year      → encrypt with duration
+PUT  /en/file.txt   → encrypt (curl -T auto filename)
+PUT  /en/1year/f.txt→ encrypt (duration + filename)
+
+PUT  /de            → decrypt
+PUT  /de/file.tlp   → decrypt (curl -T auto filename)
+```
 
 ---
 
